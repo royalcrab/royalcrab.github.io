@@ -12,6 +12,7 @@
 
 <script>
 var startTime = Date.now();
+var arr = [];
 
 function getPosition(position) {
 
@@ -23,6 +24,11 @@ function getPosition(position) {
         "heading": position.coords.heading,
         "velocity": position.coords.speed
     };
+
+    var txt = document.getElementById("txt");   // データを表示するdiv要素の取得
+        txt.innerHTML = JSON.stringify(dat);
+
+    arr.push( dat );
 }
 
 var timer = window.setInterval(() => {
