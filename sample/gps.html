@@ -31,9 +31,10 @@ function getPosition(position) {
     arr.push( dat );
 }
 
-var timer = window.setInterval(() => {
-        navigator.geolocation.getCurrentPosition(getPosition);
-    }, 1000); // 1000ms
+function loop(){
+    navigator.geolocation.getCurrentPosition(getPosition);
+    setInterval(loop, 1000); // 1000ms
+}
 
-timer();
+loop();
 </script>
