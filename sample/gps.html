@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>加速度の値を得る</title>
+</head>
+ 
+<body>
+    <div id="txt">ここにデータを表示</div>
+    <a id="download" href="#" download="dat.txt" onclick="handleDownload()">ダウンロード</a>
+
+<script>
+var startTime = Date.now();
+
+function getPosition(position) {
+
+    var dat = {
+        "time": Date.Now() - startTime,
+        "latitude": position.coords.latitude,
+        "longitude": position.coords.longitude,
+        "altitude": position.coords.altitude,
+        "heading": position.coords.heading,
+        "velocity": position.coords.speed
+    };
+}
+
+var timer = window.setInterval(() => {
+        navigator.geolocation.getCurrentPosition(getPosition);
+    }, 1000); // 1000ms
+
+</script>
