@@ -31,6 +31,23 @@ function getPosition(position) {
     arr.push( dat );
 }
 
+function handleDownload() {
+        
+        var blob = new Blob([ JSON.stringify(arr) ], { "type" : "application/json" });
+
+        if (window.navigator.msSaveBlob) { 
+            window.navigator.msSaveBlob(blob, "gps.json"); 
+
+            // msSaveOrOpenBlobの場合はファイルを保存せずに開ける
+            window.navigator.msSaveOrOpenBlob(blob, "gps.json"); 
+        } else {
+            document.getElementById("download").href = window.URL.createObjectURL(blob);
+        }
+
+        arr = [];
+        startTime = Date.now();
+    }
+
 function loop(){
     navigator.geolocation.getCurrentPosition(getPosition);    
 }
