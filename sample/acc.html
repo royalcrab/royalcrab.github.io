@@ -43,7 +43,7 @@
 
     function handleDownload() {
         
-        var blob = new Blob([ arr ], { "type" : "text/plain" });
+        var blob = new Blob([ JSON.stringify(arr) ], { "type" : "text/plain" });
 
         if (window.navigator.msSaveBlob) { 
             window.navigator.msSaveBlob(blob, "test.txt"); 
