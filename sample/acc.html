@@ -8,24 +8,36 @@
  
 <body>
     <div id="txt">ここにデータを表示</div>             <!-- データを表示するdiv要素 -->
-    <a id="download" href="#" download="dat.txt" onclick="handleDownload()">ダウンロード</a><div id="download">download</div> 
+    <a id="download" href="#" download="dat.txt" onclick="handleDownload()">ダウンロード</a>
  
 <script>
     var arr = [];
-    var dat;
+    var acc, rot;
     var aX = 0, aY = 0, aZ = 0;                     // 加速度の値を入れる変数を3個用意
+    var aA = 0, aB = 0, aC = 0;
 
     var startTime = Date.now();
+
+    window.addEventListener('deviceorientation', (dat) => {
+        aA = dat.alpha;
+        aB = dat.beta;
+        aC = dat.gamma;
+        rot = { "t": t, "a": aA, "b": aB, "c": aC};
+        arr.push( rot );
+    });
  
     // 加速度センサの値が変化したら実行される devicemotion イベント
     window.addEventListener("devicemotion", (dat) => {
         aX = dat.accelerationIncludingGravity.x;    // x軸の重力加速度（Android と iOSでは正負が逆）
         aY = dat.accelerationIncludingGravity.y;    // y軸の重力加速度（Android と iOSでは正負が逆）
         aZ = dat.accelerationIncludingGravity.z;    // z軸の重力加速度（Android と iOSでは正負が逆）
+        
+        var y = event.gamma; // -90 から 90 の範囲で角度を示す
+        
         t = Date.now() - startTime;
 
-        dat = { "t": t, "x": aX, "y": aY, "z": aZ};
-        arr.push( dat );
+        acc = { "t": t, "x": aX, "y": aY, "z": aZ};
+        arr.push( acc );
     });
     
     // 指定時間ごとに繰り返し実行される setInterval(実行する内容, 間隔[ms]) タイマーを設定
