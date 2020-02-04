@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Graph Sample</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+
+    </style>
+  </head>
+
+<body>
+    <canvas id="graph" width="300" height="200"></canvas>
+
+    <div id="txt">データを表示</div>  
+    
+    <a id="download" href="#" download="acc.json" onclick="handleDownload()">ダウンロード</a><br/>
+    <script>
+    var canvas;
+    var ctx;
+    var startTime = Date.now(); // 開始時間を記録しておく
+    var aX = 0, aY = 0, aZ = 0; // 加速度データの記録用
+    var preX = 0, preY = 0, preZ = 0; // 描画用
+    var arr = []; // セーブする用
+    
+    // 加速度データを取得する
+    window.addEventListener("devicemotion", (dat) => {
+        aX = dat.accelerationIncludingGravity.x;
+        aY = dat.accelerationIncludingGravity.y;
+        aZ = dat.accelerationIncludingGravity.z;
+    });
+
+    // canvas の初期化
+    function init()
+    {
+        canvas = document.getElementById("graph");
+        if ( ! canvas || ! canvas.getContext ) { return false; }
+        ctx = canvas.getContext('2d');
+    }
+
+    function handleDownload() {
+        
+        var blob = new Blob([ JSON.stringify(arr) ], { "type" : "application/json" });
+
+        if (window.navigator.msSaveBlob) {
+            window.navigator.msSaveBlob(blob, "acc.json");
+
+            // ファイルにセーブする。
+            // ここでのファイル名の指定よりタグ内でのファイル名の指定が優先される。
+            window.navigator.msSaveOrOpenBlob(blob, "acc.json");
+        } else {
+            document.getElementById("download").href = window.URL.createObjectURL(blob);
+        }
+
+        // セーブしたらデータをリセットする。リセットしたくなければ下記2行をコメントアウトする。
+        arr = [];
+        startTime = Date.now();
+    }
+
+    // 加速度データをグラフ表示する displayData
+    function displayData() {
+        
+        // 加速度の値を文字で表示する
+        var txt = document.getElementById("txt");
+        txt.innerHTML = "x: " + aX + "<br/>" + "y: " + aY + "<br/>" + "z: " + aZ;
+
+                if ( ! canvas || ! canvas.getContext ) { return false; }
+        ctx.fillStyle = "gray";
+        ctx.fillRect( 0, 0, canvas.clientWidth, canvas.clientHeight );
+        ctx.lineWidth = 1 ;
+
+        // 最新から 300px 分のデータを取りだす。
+        var varr = [];
+        if ( arr.length > canvas.clientWidth){
+            varr = arr.slice(-canvas.clientWidth,-1);
+        }else{
+            varr = arr;
+        }
+
+        for ( idx in varr ){
+            if ( idx > canvas.clientWidth ) break;
+            var dat = varr[idx];
+
+            // X 軸加速度を赤の線で表示する
+            var dy1 = canvas.clientHeight/2 + dat.x * 10.0;
+            var dx = idx;
+            ctx.strokeStyle = "red";
+            ctx.beginPath();
+            ctx.moveTo(dx,dy1);
+            ctx.lineTo(dx-1,preX);
+            ctx.stroke();
+
+            // Y 軸加速度を青の線で表示する
+            var dy2 = 50 + dat.y * 10.0;
+            ctx.strokeStyle = "blue";
+            ctx.beginPath();
+            ctx.moveTo(dx,dy2);
+            ctx.lineTo(dx-1,preY);
+            ctx.stroke();
+            
+            // Z 軸加速度を青の線で表示する
+            var dy3 = 50 + dat.z * 10.0;
+            ctx.strokeStyle = "green";
+            ctx.beginPath();
+            ctx.moveTo(dx,dy3);
+            ctx.lineTo(dx-1,preZ);
+            ctx.stroke();
+
+            // 次のデータを表示するときに前のデータから線を描く用
+            preX = dy1;
+            preY = dy2;
+            preZ = dy3;
+        }
+    }
+
+    // ブラウザのレンダリングのタイミングにあわせて表示を更新
+    (function loop(){
+        displayData();
+        // update();
+        window.requestAnimationFrame(loop);
+    }());
+
+    init();
+    </script>
+</body>
+</html>
+    
