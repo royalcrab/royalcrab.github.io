@@ -28,6 +28,8 @@
         aX = dat.accelerationIncludingGravity.x;
         aY = dat.accelerationIncludingGravity.y;
         aZ = dat.accelerationIncludingGravity.z;
+      
+         arr.push( {"t": Date.now() - startTime, "x": aX, "y": aY, "z": aZ });
     });
 
     // canvas の初期化
