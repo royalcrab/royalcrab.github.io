@@ -15,14 +15,8 @@ async function sample() {
     await navigator.usb.requestDevice({ 'filters': [ { 'vendorId': vid }] })
     .then(device => {
         console.log('success!')
-        await device.open()
-        await device.selectConfiguration(1)
-        await device.claimInterface(0)
-        await device.controlTransferOut({ requestType: 'vendor',
-                            recipient: 'device',
-                            request: 3 /* FTDI_SIO_SET_BAUDRATE_REQUEST */, 
-                            value: divisor_value,
-                            index: divisor_index });
+        await device.open
+
     })
     .catch(error => {
         console.log('error')
@@ -30,8 +24,17 @@ async function sample() {
     })
 }
 
-function init_usb(){
+async function init_usb(){
     device = sample()
+
+    await device.selectConfiguration(1)
+    await device.claimInterface(0)
+    await device.controlTransferOut({ requestType: 'vendor',
+                            recipient: 'device',
+                            request: 3 /* FTDI_SIO_SET_BAUDRATE_REQUEST */, 
+                            value: divisor_value,
+                            index: divisor_index });
+
     let dat = [0xa5,0x81,0xf0,0xd6,0x00,0x00,0xf7,0x09]
     device.transferOut( 8, dat )
 }
