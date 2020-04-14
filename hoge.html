@@ -8,14 +8,21 @@
   </div>
 <script>
 let device = null;
-function sample() {
+async function sample() {
     const pid = 0x6001
     const vid = 0x0403
     const serial = 'AD01SSG4'
-    navigator.usb.requestDevice({ 'filters': [ { 'vendorId': vid }] })
+    await navigator.usb.requestDevice({ 'filters': [ { 'vendorId': vid }] })
     .then(device => {
         console.log('success!')
-        return device.open;
+        await device.open()
+        await device.selectConfiguration(1)
+        await device.claimInterface(0)
+        await device.controlTransferOut({ requestType: 'vendor',
+                            recipient: 'device',
+                            request: 3 /* FTDI_SIO_SET_BAUDRATE_REQUEST */, 
+                            value: divisor_value,
+                            index: divisor_index });
     })
     .catch(error => {
         console.log('error')
@@ -24,11 +31,14 @@ function sample() {
 }
 
 function init_usb(){
-   device = sample()
+    device = sample()
+    let dat = [0xa5,0x81,0xf0,0xd6,0x00,0x00,0xf7,0x09]
+    device.transferOut( 8, dat )
 }
   
 self.onSongleAPIReady =
 function(Songle) {
+  let dat = []
   var player =
     new Songle.Player({
       mediaElement: "#songle"
@@ -37,27 +47,37 @@ function(Songle) {
   player.addPlugin(new Songle.Plugin.Beat());
   player.useMedia("https://www.youtube.com/watch?v=zweVJrnE1uY");
 
+  if ( device == null ) return;
   player.on("beatPlay",
     function(ev) {
       switch(ev.data.beat.position) {
         case 1:
+          dat = [0xa5,0x81,0xf4,0x0a,0x00,0x00,0x3d,0xc9]
+          device.transferOut( 8, dat )
           console.log("1st beat !!");
           break;
 
         case 2:
+          dat = [0xa5,0x81,0xf4,0x00,0x0a,0x00,0x9f,0xef]
+          device.transferOut( 8, dat )
           console.log("2nd beat !!");
           break;
 
         case 3:
+          dat = [0xa5,0x81,0xf4,0x00,0x00,0x0a,0x38,0x69]
+          device.transferOut( 8, dat )
           console.log("3rd beat !!")
           break;
 
         case 4:
+          //dat = [0xa5,0x81,0xf0,0xd5,0x00,0x00,0xf7,0xf9]
+          dat = [0xa5,0x81,0xf0,0xd6,0x00,0x00,0xf7,0x09]
+          device.transferOut( 8, dat )
           console.log("4th beat !!");
           break;
       }
     });
-    if ( device == null ) return;
+
 }
 </script>
 </body>
