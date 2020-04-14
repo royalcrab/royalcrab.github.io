@@ -1,0 +1,23 @@
+<html>
+<body>
+<script>
+let device = null;
+function sample() {
+    const pid = 0x6001
+    const vid = 0x0403
+    const serial = 'AD01SSG4'
+    navigator.usb.requestDevice({ 'filters': [ { 'vendorId': vid }] })
+    .then(device => {
+        console.log('success!')
+        return device.open;
+    })
+    .catch(error => {
+        console.log('error')
+        console.log(error)
+    })
+}
+
+device = sample()
+</script>
+</body>
+</html>
