@@ -6,7 +6,9 @@
       <div id="songle">
       </div>
   </div>
-  <canvas id="canvas" width="40" height="40"></canvas>
+
+  <canvas id="canvas" width="640" height="480"></canvas>
+  <src img="http://mplpl.sakura.ne.jp/wp/wp-content/themes/mplpl/images/common/logo_02.png" hidden id="logo"></src>    
 <script>
 
 let canvas;
@@ -27,23 +29,23 @@ function(Songle) {
     function(ev) {
       switch(ev.data.beat.position) {
         case 1:
-            draw( 100, 0, 0 )
+            draw( 250, 0, 0 )
             console.log("1st beat !!");
             break;
 
         case 2:
           console.log("2nd beat !!");
-          draw( 0, 100, 0 )
+          draw( 0, 250, 0 )
           break;
 
         case 3:
           console.log("3rd beat !!")
-          draw( 0, 0, 100 )
+          draw( 0, 0, 250 )
           break;
 
         case 4:
           console.log("4th beat !!");
-          draw( 100, 100, 100 )
+          draw_logo()
           break;
       }
     });
