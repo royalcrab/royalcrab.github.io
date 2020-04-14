@@ -1,16 +1,9 @@
 <html>
 <body>
+  <input type="button" value="init" onClick="init_usb()"/>
 <script>
-navigator.usb.requestDevice({ filters: [] }) // { vendorId: 0x0403 }
-.then(device => {
-  console.log(device.productName);      // "Arduino Micro"
-  console.log(device.manufacturerName); // "Arduino LLC"
-})
-.catch(error => { console.log(error); });
-</script>
 
-    <!--
-<script>
+ <script>
 let device = null;
 function sample() {
     const pid = 0x6001
@@ -27,7 +20,9 @@ function sample() {
     })
 }
 
-device = sample()
+function init_usb(){
+   device = sample()
+}
 </script>
 --!>
        
