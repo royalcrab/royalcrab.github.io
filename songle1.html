@@ -23,7 +23,6 @@ function(Songle) {
   player.addPlugin(new Songle.Plugin.Beat());
   player.useMedia("https://www.youtube.com/watch?v=zweVJrnE1uY");
 
-  if ( device == null ) return;
   player.on("beatPlay",
     function(ev) {
       switch(ev.data.beat.position) {
