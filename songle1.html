@@ -45,7 +45,7 @@ function(Songle) {
 
         case 4:
           console.log("4th beat !!");
-          draw_logo()
+          draw( 0, 0, 0 )
           break;
       }
     });
@@ -58,14 +58,23 @@ function draw_logo()
     ctx.fillStyle = "rgb(0,0,0)"
     ctx.fillRect( 0, 0, canvas.clientWidth, canvas.clientHeight )
     
-    ctx.drawImage( img, 150, 180)
+    
 
 }
+
+let x = 0
+let y = 0
 
 function draw( r,g,b ){
     if ( ctx == null ) return;
     ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")"
     ctx.fillRect( 0, 0, canvas.clientWidth, canvas.clientHeight )
+
+    ctx.drawImage( img, x, y )
+    x += 12
+    y += 16
+    if ( x > canvas.clientWidth - 230 ) x = 0
+    if ( y > canvas.clientHeight - 20 ) y = 0
 }
 
 function init(){
