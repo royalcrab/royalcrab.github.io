@@ -1,6 +1,11 @@
 <html>
 <body>
   <input type="button" value="init" onClick="init_usb()"/>
+  <script src="https://api.songle.jp/v2/api.js"></script>
+    <div class="media">
+      <div id="songle">
+      </div>
+  </div>
 <script>
 let device = null;
 function sample() {
@@ -20,6 +25,39 @@ function sample() {
 
 function init_usb(){
    device = sample()
+}
+  
+self.onSongleAPIReady =
+function(Songle) {
+  var player =
+    new Songle.Player({
+      mediaElement: "#songle"
+    });
+
+  player.addPlugin(new Songle.Plugin.Beat());
+  player.useMedia("https://www.youtube.com/watch?v=zweVJrnE1uY");
+
+  player.on("beatPlay",
+    function(ev) {
+      switch(ev.data.beat.position) {
+        case 1:
+          console.log("1st beat !!");
+          break;
+
+        case 2:
+          console.log("2nd beat !!");
+          break;
+
+        case 3:
+          console.log("3rd beat !!")
+          break;
+
+        case 4:
+          console.log("4th beat !!");
+          break;
+      }
+    });
+    if ( device == null ) return;
 }
 </script>
 </body>
