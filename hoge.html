@@ -1,7 +1,16 @@
 <html>
 <body>
     <iframe allowpaymentrequest allow=’usb fullscreen’> </iframe>
-    
+<script>
+    navigator.usb.requestDevice({ filters: [{ vendorId: 0x0403 }] })
+.then(device => {
+  console.log(device.productName);      // "Arduino Micro"
+  console.log(device.manufacturerName); // "Arduino LLC"
+})
+.catch(error => { console.log(error); });
+</script>
+
+    <!--
 <script>
 let device = null;
 function sample() {
@@ -21,6 +30,7 @@ function sample() {
 
 device = sample()
 </script>
+--!>
        
 </body>
 </html>
