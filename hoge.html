@@ -15,7 +15,7 @@ async function sample() {
     await navigator.usb.requestDevice({ 'filters': [ { 'vendorId': vid }] })
     .then(device => {
         console.log('success!')
-        await device.open
+        return device.open
 
     })
     .catch(error => {
