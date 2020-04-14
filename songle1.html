@@ -8,11 +8,11 @@
   </div>
 
   <canvas id="canvas" width="640" height="480"></canvas>
-  <src img="http://mplpl.sakura.ne.jp/wp/wp-content/themes/mplpl/images/common/logo_02.png" hidden id="logo"></src>    
 <script>
 
 let canvas;
 let ctx;
+let img = new Image();
 
 self.onSongleAPIReady =
 function(Songle) {
@@ -52,6 +52,16 @@ function(Songle) {
 
 }
 
+function draw_logo()
+{
+    if ( ctx == null ) return;
+    ctx.fillStyle = "rgb(0,0,0)"
+    ctx.fillRect( 0, 0, canvas.clientWidth, canvas.clientHeight )
+    
+    ctx.drawImage( img, 150, 180)
+
+}
+
 function draw( r,g,b ){
     if ( ctx == null ) return;
     ctx.fillStyle = "rgb(" + r + "," + g + "," + b + ")"
@@ -62,6 +72,8 @@ function init(){
     canvas = document.getElementById("canvas");
     if ( ! canvas || ! canvas.getContext ) { return false; }
     ctx = canvas.getContext('2d');
+
+    img.src = "http://mplpl.sakura.ne.jp/wp/wp-content/themes/mplpl/images/common/logo_02.png";
 }
 
 init()
