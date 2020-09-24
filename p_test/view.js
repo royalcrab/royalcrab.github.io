@@ -7,12 +7,18 @@ let seven_view = (function()
     let ctx;
     let cw, ch;
 
+    let game_sequence = [];
+    let game_idx = 0;
+
+    let timer;
+
     let state = {
         none: 0,
         memory: 1,
         wait: 2,
         remember: 3,
         answer: 4,
+        result: 7,
         refresh: 5,
         finish: 6
     }
@@ -22,9 +28,6 @@ let seven_view = (function()
     let mode;
     let updated = false;
 
-
-
-    
     function getMousePosition(c, evt) {
         var rect = c.getBoundingClientRect();
         return {
@@ -60,6 +63,7 @@ let seven_view = (function()
     let memory_number;
     let memory_max = 5;
     let memory_circles;
+    let memory_answer_count = 0;
 
     // change state 
     function change_state( s ){
@@ -69,17 +73,48 @@ let seven_view = (function()
 
         switch( mode ){
             case state.memory:
+                memory_answer_count = 0;
 
                 console.log( memory_number );
                 break;
 
             case state.wait:
+                mouse_enable = true;
                 memory_count = 0;
                 break;
 
             case state.remember:
                 mouse_enable = true;
                 memory_count = 0;
+                break;
+
+            case state.answer:
+                mouse_enable = false;
+                memory_count = 0;
+                break;
+
+            case state.result:
+                memory_count = 0;
+                break;
+
+            case state.finish:
+                memory_count = 0;
+                game_idx ++;
+
+                //console.log( game_idx );
+                //console.log( game_sequence );
+                //console.log( game_sequence.length );
+
+                console.log( memory_number );
+                console.log( memory_circles );
+
+                clearInterval(timer);
+                change_state( state.none );
+
+                if ( game_idx < game_sequence.length ){
+                    start_play( game_sequence[game_idx]);
+                }
+
                 break;
 
             default:
@@ -141,11 +176,70 @@ let seven_view = (function()
                 ctx.font = "100px sans-serif";
                 ctx.fillStyle = "yellow";
 
-                ctx.fillText( Math.floor( ((33 * 4) - memory_count )/ 33) + 1, 350, 100 );
+                ctx.fillText( Math.floor( ((40 * memory_max) - memory_count )/ 33) + 1, 350, 100 );
             
                 memory_count++;
-                if ( memory_count > 33 * 4 + 33 ){
-                    change_state( state.none );
+                if ( memory_count > 33 * 4 + 33 || memory_answer_count == memory_max ){
+                    memory_circles.forEach( function(e){
+                        e.mouse_over = false;
+                    });
+                    change_state( state.answer );
+                }
+                break;
+
+            case state.answer:
+
+                clear();
+                normal_display( -1 );
+
+                //ctx.font = "100px sans-serif";
+                //ctx.fillStyle = "yellow";
+
+                //ctx.fillText("Result", 250, 100);
+
+                memory_count++;
+
+                if ( memory_count > 33 * 2 ){
+                    change_state( state.result );
+                }
+                break;
+
+            case state.result:
+                clear();
+                normal_display( -1 );
+
+                memory_count++;
+
+                if ( memory_count < 33 * 3 ){
+
+                    ctx.font = "100px sans-serif";
+                    ctx.fillStyle = "yellow";
+
+                    let match = 0;
+
+                    // console.log( memory_number );
+                    // console.log( memory_circles );
+
+                    for ( let i = 0; i < memory_max; i++ ){
+                        //if ( memory_number[i] + 1 == memory_circles[i].order ){
+                        //   match ++;
+                        //}
+                        if ( memory_circles[i].order != 0  ){
+                            if ( memory_number[memory_circles[i].order-1] == i){
+                                match ++;
+                            }
+                        }
+                    }
+                    if ( match == memory_max ){
+                        ctx.fillText("Good", 250, 100);
+                    }else{
+                        ctx.fillText("Bad", 250, 100);
+                    }
+
+                    console.log( match );
+
+                }else{
+                    change_state( state.finish );
                 }
                 break;
 
@@ -158,16 +252,26 @@ let seven_view = (function()
     {
         for ( let i = 0; i < memory_max; i ++ ){
             ctx.fillStyle = "rgb(10,10,10)";
-            if ( num == i ){
-                ctx.fillStyle = "red";
-            }
             ctx.strokeStyle = "black";
 
+            if ( num == i ){
+                ctx.fillStyle = "skyblue";
+            }
+            if ( memory_circles[i].mouse_over == true ){
+                ctx.fillStyle = "pink";
+            }
+            
             ctx.beginPath();
             ctx.arc( memory_circles[i].x, memory_circles[i].y, 60, 0, 360 );
             ctx.fill();
             ctx.stroke();
-            
+
+            if ( memory_circles[i].order > 0 ){
+                ctx.font = "64px sans-serif";
+                ctx.fillStyle = "white";
+    
+                ctx.fillText(memory_circles[i].order, memory_circles[i].x-20, memory_circles[i].y+22 );
+            }
         }
     }
     /*
@@ -206,16 +310,30 @@ let seven_view = (function()
     }*/
 
     function mouse_up(evt){
-        if ( mouse_enable == faulse ) return;
+        if ( mouse_enable == false ) return;
+
+        memory_circles.forEach( function( e ){
+            if ( e.mouse_over == true && e.order == 0 ){
+                memory_answer_count ++;
+                e.order = memory_answer_count;
+            }
+        });
     }
 
     function mouse_move(evt){
         mouse_pos = getMousePosition(canvas, evt);
         if ( mouse_enable == false ) return;
 
-        console.log( mouse_pos );
+        // console.log( mouse_pos );
         memory_circles.forEach( function( e ){
+            e.mouse_over = false;
+            let dist = (e.x - mouse_pos.x) * (e.x - mouse_pos.x) + (e.y - mouse_pos.y) * (e.y - mouse_pos.y);
+            
+            // console.log( dist );
 
+            if ( dist < 60*60 ){
+                e.mouse_over = true;
+            }
         });
     }
 
@@ -235,13 +353,16 @@ let seven_view = (function()
     {
         memory_count = 0;
         memory_max = num;
+        memory_answer_count = 0;
 
         memory_circles = new Array(num);
 
         for ( let i = 0; i < num; i++ ){
             let pos = {
                 x: 100 + ((i % Math.round(memory_max / 2))) * (600 / Math.round((memory_max) / 2 - 1)),
-                y: 250 + Math.floor((i / (memory_max / 2 ))) * 200
+                y: 250 + Math.floor((i / (memory_max / 2 ))) * 200,
+                order: 0,
+                mouse_over: false
             };
             memory_circles[i] = pos;
         }
@@ -262,7 +383,14 @@ let seven_view = (function()
         }
 
         change_state( state.memory );
-        setInterval( update, 30 );
+        timer = setInterval( update, 30 );
+    }
+
+    function play(seq){
+        game_sequence = seq;
+        game_idx = 0;
+
+        start_play(game_sequence[game_idx]); // begin play first game
     }
 
     let values = {
@@ -270,15 +398,17 @@ let seven_view = (function()
         test: test,
         clear: clear,
 //        start_game: start_game,
-        start_play: start_play
+        start_play: start_play,
+        play: play
     };
     return values;
 })();
 
 seven_view.init('field');
-seven_view.clear();
+//seven_view.clear();
 
-seven_view.start_play(10);
+seven_view.play([3,4,6,3]);
+
 console.log( seven_view.test );
 
 
