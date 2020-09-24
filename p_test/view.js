@@ -211,9 +211,12 @@ let seven_view = (function()
 
     function mouse_move(evt){
         mouse_pos = getMousePosition(canvas, evt);
-        
         if ( mouse_enable == false ) return;
 
+        console.log( mouse_pos );
+        memory_circles.forEach( function( e ){
+
+        });
     }
 
     function init(canvas_name){
