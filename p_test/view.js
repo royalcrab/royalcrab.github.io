@@ -407,7 +407,7 @@ let seven_view = (function()
 seven_view.init('field');
 //seven_view.clear();
 
-seven_view.play([3,4,,5,6,7,8]);
+seven_view.play([3,4,5,6,7,8]);
 
 console.log( seven_view.test );
 
