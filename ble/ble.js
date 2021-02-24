@@ -65,7 +65,7 @@ async function onButtonClick()
 
 function sendData(e)
 {
-  if ( isConnected && characteristic != null ){
+  if ( isConnected && characteristics != null ){
     if ( characteristics[0] != null ){
 
       let ch = characteristics[0];
