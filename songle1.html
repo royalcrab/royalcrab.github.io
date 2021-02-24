@@ -14,41 +14,37 @@ let canvas;
 let ctx;
 let img = new Image();
 
-self.onSongleAPIReady =
-function(Songle) {
-  let dat = []
-  var player =
-    new Songle.Player({
-      mediaElement: "#songle"
-    });
+self.onSongleAPIReady = function(Songle){
+    let dat = []
+    var player = new Songle.Player({ mediaElement: "#songle"});
 
-  player.addPlugin(new Songle.Plugin.Beat());
-  player.useMedia("https://www.youtube.com/watch?v=zweVJrnE1uY");
+    player.addPlugin(new Songle.Plugin.Beat());
+    player.useMedia("https://www.youtube.com/watch?v=zweVJrnE1uY");
 
-  player.on("beatPlay",
-    function(ev) {
-      switch(ev.data.beat.position) {
-        case 1:
-            draw( 250, 0, 0 )
-            console.log("1st beat !!");
-            break;
+    player.on("beatPlay",
+        function(ev) {
+        switch(ev.data.beat.position) {
+            case 1:
+                draw( 250, 0, 0 )
+                console.log("1st beat !!");
+                break;
 
-        case 2:
-          console.log("2nd beat !!");
-          draw( 0, 250, 0 )
-          break;
+            case 2:
+                console.log("2nd beat !!");
+                draw( 0, 250, 0 )
+                break;
 
-        case 3:
-          console.log("3rd beat !!")
-          draw( 0, 0, 250 )
-          break;
+            case 3:
+                console.log("3rd beat !!")
+                draw( 0, 0, 250 )
+                break;
 
-        case 4:
-          console.log("4th beat !!");
-          draw( 0, 0, 0 )
-          break;
-      }
-    });
+            case 4:
+                console.log("4th beat !!");
+                draw( 0, 0, 0 )
+                break;
+        }
+        });
 
 }
 
@@ -57,9 +53,6 @@ function draw_logo()
     if ( ctx == null ) return;
     ctx.fillStyle = "rgb(0,0,0)"
     ctx.fillRect( 0, 0, canvas.clientWidth, canvas.clientHeight )
-    
-    
-
 }
 
 let x = 0

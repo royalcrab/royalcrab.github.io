@@ -5,15 +5,34 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>GPSの値を得る</title>
 </head>
- 
+
 <body>
     <div id="txt">ここにデータを表示</div>
-    <a id="download" href="#" download="dat.txt" onclick="handleDownload()">ダウンロード</a>
+    <a id="download" href="#" download="dat.txt" onclick="handleDownload()">ダウンロード</a><br/>
+    <button id="button" type="button" onclick="sendData()">送信</button>
 
 <script>
 var startTime = Date.now();
 var arr = [];
 
+function sendData(){
+      var url = "file.php";
+   var xhr = new XMLHttpRequest();
+   console.log(url);
+
+   xhr.open("POST", url);
+   xhr.setRequestHeader("Content-Type", "application/json");
+   xhr.onload = () => {
+     console.log(xhr.status);
+     window.alart("送信に成功しました。");
+     arr = [];
+   };
+   xhr.onerror = () => {    
+     console.log(xhr.status);
+     window.alart("送信に失敗しました。");
+   };
+   xhr.send(data);
+}
 function getPosition(position) {
 
     var dat = {
@@ -35,11 +54,11 @@ function handleDownload() {
         
         var blob = new Blob([ JSON.stringify(arr) ], { "type" : "application/json" });
 
-        if (window.navigator.msSaveBlob) { 
-            window.navigator.msSaveBlob(blob, "gps.json"); 
+        if (window.navigator.msSaveBlob) {
+            window.navigator.msSaveBlob(blob, "gps.json");
 
             // msSaveOrOpenBlobの場合はファイルを保存せずに開ける
-            window.navigator.msSaveOrOpenBlob(blob, "gps.json"); 
+            window.navigator.msSaveOrOpenBlob(blob, "gps.json");
         } else {
             document.getElementById("download").href = window.URL.createObjectURL(blob);
         }
@@ -49,7 +68,7 @@ function handleDownload() {
     }
 
 function loop(){
-    navigator.geolocation.getCurrentPosition(getPosition);    
+    navigator.geolocation.getCurrentPosition(getPosition);
 }
 
 setInterval(loop, 1000); // 1000ms
@@ -66,3 +85,6 @@ var unloaded = function (e) {
 window.addEventListener('beforeunload', unloaded, false);
 
 </script>
+</body>
+</html>
+
