@@ -11,7 +11,7 @@ async function onButtonClick() {
       device = await navigator.bluetooth.requestDevice({
         filters: [
           { services: [serviceUuid] },
-          { name: ["m5-stack-bbled"] },
+          { name: ["m5stack-bbled"] },
         ],
       });
     
@@ -34,14 +34,21 @@ async function onButtonClick() {
   
         const encoder = new TextEncoder('utf-8');
         const text = 'hi!';
+
         await myCharacteristic.writeValue(encoder.encode(text));
-  
         await myCharacteristic.startNotifications();
 
         myCharacteristic.addEventListener('characteristicvaluechanged', (event) => {
           const value = event.target.value;
           const decoder = new TextDecoder('utf-8');
           console.log(decoder.decode(value));
+        });
+
+        let btn = document.getElementById('send_button');
+        btn.removeEventListener('click');
+        btn.addEventListener('click', (e) => {
+          await myCharacteristic.writeValue(encoder.encode("Data from PC"));
+          await myCharacteristic.startNotifications();
         });
   
         console.log('Waiting 60 seconds to receive data from the device...')
