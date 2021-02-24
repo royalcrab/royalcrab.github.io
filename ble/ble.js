@@ -44,11 +44,19 @@ async function onButtonClick() {
           console.log(decoder.decode(value));
         });
 
+        const awaitForClick = target => {
+          return new Promise(resolve => { // 処理A
+            const listener = resolve;     // 処理B
+            target.addEventListener("click", listener, {once: true}); // 処理C
+          });
+        };
+
         let btn = document.getElementById('send_button');
         btn.removeEventListener('click');
         btn.addEventListener('click', (e) => {
-          await myCharacteristic.writeValue(encoder.encode("Data from PC"));
-          await myCharacteristic.startNotifications();
+          myCharacteristic.writeValue(encoder.encode("Data from PC")).then(
+            char => {myCharacteristic.startNotifications();}
+          );
         });
   
         console.log('Waiting 60 seconds to receive data from the device...')
@@ -65,6 +73,8 @@ async function onButtonClick() {
       }
     }
   }
+
+
   
   async function sleep(ms) {
     return new Promise((resolve) => {
