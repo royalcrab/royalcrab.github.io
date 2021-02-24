@@ -1,12 +1,11 @@
+let device = null;
+let characteristics = null; 
+let isConnetted = false;
 
 async function onButtonClick() 
 {
   let serviceUuid =        "28a9e388-2cc8-46f1-a125-a5b17860411f"
   let characteristicUuid = "f1445c0c-a803-4ca7-abeb-651ac724c103"
-
-  let device = null;
-  let characteristics = null; 
-  let isConnetted = false;
 
   try {
     console.log('Requesting Bluetooth Device...');
@@ -66,9 +65,12 @@ async function onButtonClick()
 
 function sendData(e)
 {
-  if ( isConnected && myCharacteristic != null ){
-    myCharacteristic.writeValue(encoder.encode("Data from PC")).then(
-      char => {myCharacteristic.startNotifications();}
+  if ( isConnected && characteristic != null ){
+    if ( characteristics[0] != null ){
+
+      let ch = characteristics[0];
+      ch.writeValue(encoder.encode("Data from PC")).then(
+        char => {ch.startNotifications();}
     );
   }
 }
