@@ -1,8 +1,8 @@
 let device = null;
-let characteristics = null; 
+let characteristics = null;
 let isConnetted = false;
 
-async function onButtonClick() 
+async function onButtonClick()
 {
   let serviceUuid =        "28a9e388-2cc8-46f1-a125-a5b17860411f"
   let characteristicUuid = "f1445c0c-a803-4ca7-abeb-651ac724c103"
@@ -71,7 +71,8 @@ function sendData(e)
       let ch = characteristics[0];
       ch.writeValue(encoder.encode("Data from PC")).then(
         char => {ch.startNotifications();}
-    );
+      );
+    }
   }
 }
 
