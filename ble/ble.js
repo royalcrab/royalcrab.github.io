@@ -1,5 +1,5 @@
 let device = null;
-let characteristics = null;
+let chracteristics = null;
 let isConnetted = false;
 
 async function onButtonClick()
@@ -68,6 +68,7 @@ function sendData(e)
   if ( isConnected && characteristics != null ){
     if ( characteristics[0] != null ){
 
+      const encoder = new TextDecoder('utf-8');
       let ch = characteristics[0];
       ch.writeValue(encoder.encode("Data from PC")).then(
         char => {ch.startNotifications();}
