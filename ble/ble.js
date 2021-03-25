@@ -68,7 +68,7 @@ function sendData(e)
   if ( isConnected && characteristics != null ){
     if ( characteristics[0] != null ){
 
-      const encoder = new TextDecoder('utf-8');
+      const encoder = new TextEncoder('utf-8');
       let ch = characteristics[0];
       ch.writeValue(encoder.encode("Data from PC")).then(
         char => {ch.startNotifications();}
