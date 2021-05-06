@@ -2,11 +2,26 @@
 <head>
 </head>
 <body>
+  <div id="display">
+    <span id="blinking">■</span>
+    <span id="timecode"></span>
+  </div>
+  <br/>
+  <audio id="media" src="https://bbled.org/kani/audio/01.mp3" controls>
+  <br/>
   <div id="prameters">
       <label>bpm:</label>
       <input type="text" value="100" id="bpm"/>
   </div>
   <br/>
-  <audio src="https://bbled.org/kani/audio/01.mp3" controls>
+<script>
+const audio = document.getElementById('media');
+const tc = document.getElementById('timecode');
+
+audio.addEventListener('timeupdate', (event) => {
+  tc.InnerText(audio.currentTime);
+});
+
+</script>
 </body>
 </html>
