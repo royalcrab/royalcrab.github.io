@@ -5,6 +5,11 @@
   <div id="display">
     <span id="blinking">■</span>
     <span id="timecode"></span>
+    <br/>
+    beat: <span id="beat">0</span>
+    <br/>
+    measure <span id="measure"></span>
+    <br/>
   </div>
   <br/>
   <audio id="media1" src="https://bbled.org/kani/audio/01.mp3" controls>
@@ -29,7 +34,7 @@
   </div>
   <div id="ui">
     <div id="select_music">
-      <input type="radio" name="music" value="1"/>
+      <input type="radio" name="music" value="1" checked/>
       <label> music 1 </label> /
       <input type="radio" name="music" value="2"/>
       <label> music 2 </label> /
@@ -42,7 +47,7 @@
     <input type="button" value="play" onclick="audio_play()"/>
     <input type="button" value="pause"/>
     <input type="button" value="!＜"/>
-    <input type="button" value=">＞|"/>
+    <input type="button" value="＞|"/>
   </div>
   <br/>
 <script>
