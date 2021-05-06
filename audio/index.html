@@ -18,8 +18,10 @@
 const audio = document.getElementById('media');
 const tc = document.getElementById('timecode');
 
+tc.textContent = 0;
+
 audio.addEventListener('timeupdate', (event) => {
-  tc.InnerText(audio.currentTime);
+  tc.textContent = audio.currentTime;
 });
 
 </script>
