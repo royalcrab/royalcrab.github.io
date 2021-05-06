@@ -27,7 +27,7 @@ tc.textContent = 0;
 
 audio.addEventListener('timeupdate', (event) => {
   tc.textContent = audio.currentTime;
-  let ti = parseInt(audio.textContent);
+  let ti = parseInt(audio.currentTime);
   if ( ti % 2 == 0 ){
     square.style.color = "red";
   }else{
