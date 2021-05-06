@@ -8,12 +8,16 @@
   </div>
   <br/>
   <audio id="media1" src="https://bbled.org/kani/audio/01.mp3" controls>
+    bpm: 118
   </audio>
   <audio id="media2" src="https://bbled.org/kani/audio/02.mp3" controls>
+    bpm: 118
   </audio>
   <audio id="media3" src="https://bbled.org/kani/audio/03.mp3" controls>
+    bpm: 126
   </audio>
   <audio id="media4" src="https://bbled.org/kani/audio/04.mp3" controls>
+    bpm: 126
   </audio>
   <br/>
   <div id="prameters">
@@ -24,7 +28,21 @@
       <input type="text" value="118" id="bpm"/>
   </div>
   <div id="ui">
+    <div id="select_music">
+      <input type="radio" name="music" value="1"/>
+      <label> music 1 </label> /
+      <input type="radio" name="music" value="2"/>
+      <label> music 2 </label> /
+      <input type="radio" name="music" value="3"/>
+      <label> music 3 </label> /
+      <input type="radio" name="music" value="4"/>
+      <label> music 4 </label>
+    </div>
+    <br>
     <input type="button" value="play" onclick="audio_play()"/>
+    <input type="button" value="pause"/>
+    <input type="button" value="!＜"/>
+    <input type="button" value=">＞|"/>
   </div>
   <br/>
 <script>
