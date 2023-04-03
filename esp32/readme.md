@@ -5,3 +5,5 @@ C:\Users\XXXX\AppData\Local\Arduino15\packages\esp32\tools\esptool_py\4.2.1/espt
 ```
 
 COM と XXXX を書き換えること。
+
+- [BIN FILES](/esp32/BIN20230401.zip)
